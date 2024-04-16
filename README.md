@@ -1,6 +1,6 @@
 # photometry
 
-This module is for processing fiber photometry data contained in doric files. 
+This package is for processing fiber photometry data contained in doric files. 
 
 To install, you must first have Python and conda already installed. Clone the repo, navigate to the home directory, and in the command line run 
 

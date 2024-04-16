@@ -8,7 +8,13 @@ To install, you must first have Python and conda already installed. Clone the re
 conda env create --name photometry --file=environment_mac.yml
 ```
 
-then run 
+Then activate the environment 
+
+```
+conda activate photometry
+```
+
+and run 
 
 ```
 pip install -e .

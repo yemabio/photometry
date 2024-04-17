@@ -17,4 +17,4 @@ To install, make sure you have Python and conda installed on your machine. Then,
 ```conda activate photometry```
 
 5) Install repository
-```pip install -e . 
+```pip install -e .```

@@ -1,5 +1,45 @@
 import numpy as np
 from photometry import utils
+from scipy.ndimage import gaussian_filter1d
+
+class DataFile:
+    def __init__(self, 
+                 filename, 
+                 minutes_before_ttl_pulse=0,
+                 datatype=None,
+                 frequency=0.0166,
+                 z_norm=True,
+                 smoothing=0,
+                 ):
+        self.filename = filename
+        self.datatype=datatype
+        self.minutes_before_ttl_pulse = minutes_before_ttl_pulse
+        self.frequency=frequency
+        self.z_norm = z_norm
+        self.pre_injection_interval = self.convert_min_to_timesteps()
+        self.df_f = None
+        self.ttl_end = 0
+        self.extract_df_f()
+        if smoothing:
+            self.smoothed_df_f = gaussian_filter1d(self.df_f, smoothing)
+
+    def convert_min_to_timesteps(self):
+        return(int((self.minutes_before_ttl_pulse)*60/self.frequency))
+    
+    # def returner(self):
+    #     return returner(self.frequency)
+    
+    def extract_df_f(self):
+        extracted_df_f = get_df_f_from_doric(self.filename,z_norm=self.z_norm,subtract_pre_inj=self.pre_injection_interval)
+    # for file_id, file_obj in file_dict.items():
+    #  = analysis.get_df_f_from_doric(file_obj.filename,z_norm=True, subtract_pre_inj=file_obj.pre_injection_interval)
+        if len(extracted_df_f) == 2:
+            self.df_f, self.ttl_end = extracted_df_f
+        else:
+            self.df_f = extracted_df_f 
+# def returner(x):
+#     return x+1
+        
 
 def linear_fit(y_series, x_series):
     reg = np.polyfit(x_series, y_series, 1)
@@ -22,6 +62,9 @@ def convert_sig_to_df_f(signal, baseline, z_norm=False):
         return z_score(compute_delta_f_over_f(signal, fitted_baseline))
     else:
         return compute_delta_f_over_f(signal,fitted_baseline)
+
+def get_pulse_end(ttl):
+    return np.where(ttl == 1)[0][-1]
 
 def subtract_pre_ttl(time_series, ttl, pre_pulse_interval):
     pulse_end = np.where(ttl == 1)[0][-1]
@@ -54,7 +97,7 @@ def get_df_f_from_doric(filename, z_norm=False, subtract_pre_inj=0):
         # baseline = data[1]
     
     if subtract_pre_inj:
-        return subtract_pre_ttl(df_f, data[2], pre_pulse_interval=subtract_pre_inj)
+        return (subtract_pre_ttl(df_f, data[2], pre_pulse_interval=subtract_pre_inj),get_pulse_end(data[2]))
 
     else:
         return df_f

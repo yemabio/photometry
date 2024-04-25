@@ -3,7 +3,7 @@ import numpy as np
 
 #DO NOT EDIT: set plotting parameters
 
-def plot_traces(file_dict, smoothed=False):
+def plot_traces(file_dict, smoothed=False, ymin=-2,ymax=2):
 
     linewidth=.5
     fig, ax = plt.subplots(figsize=(4,1.5))
@@ -13,7 +13,7 @@ def plot_traces(file_dict, smoothed=False):
 #            ymin = 0, ymax = 1, color = 'k', linewidth=linewidth, linestyle = '--', 
 #            transform=ax.get_xaxis_transform(), label='Injection')
     ax.set_xlabel('Time (min.)')
-    for i, (file_id, file_obj) in enumerate(file_dict.items()):
+    for i, (_, file_obj) in enumerate(file_dict.items()):
     
         if i == 0:
             x = np.arange(len(file_obj.df_f))
@@ -47,6 +47,8 @@ def plot_traces(file_dict, smoothed=False):
  
     ax.axhline(0, xmin=0, xmax=1, color ='k', linewidth=linewidth, linestyle='--',zorder=len(file_dict)+1)
     ax.legend(fontsize=5)
+
+    ax.set_ylim((ymin,ymax))
 
 def color_picker(file_obj):
     if file_obj.datatype == 'Saline':

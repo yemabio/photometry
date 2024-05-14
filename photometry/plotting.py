@@ -9,7 +9,7 @@ def plot_traces(file_dict, smoothed=False, ymin=-2,ymax=2):
     fig, ax = plt.subplots(figsize=(4,1.5))
     ax.spines[['right','top']].set_visible(False)
     ax.set_ylabel(r'$\Delta$F/F')
-# ax.vlines(pre_injection_interval,  
+# ax.vlines(baseline_interval,  
 #            ymin = 0, ymax = 1, color = 'k', linewidth=linewidth, linestyle = '--', 
 #            transform=ax.get_xaxis_transform(), label='Injection')
     ax.set_xlabel('Time (min.)')
@@ -24,22 +24,22 @@ def plot_traces(file_dict, smoothed=False, ymin=-2,ymax=2):
             ymin = 0, ymax = 1, color = 'k', linewidth=linewidth, linestyle = '--', 
             transform=ax.get_xaxis_transform(),zorder=len(file_dict))
             if smoothed:
-                ax.plot(x[file_obj.ttl_end-file_obj.pre_injection_interval:file_obj.ttl_end],file_obj.smoothed_df_f[file_obj.ttl_end-file_obj.pre_injection_interval:file_obj.ttl_end], linewidth=linewidth,label=file_obj.datatype,zorder=i, color=color_picker(file_obj))
+                ax.plot(x[file_obj.ttl_end-file_obj.baseline_interval:file_obj.ttl_end],file_obj.smoothed_df_f[file_obj.ttl_end-file_obj.baseline_interval:file_obj.ttl_end], linewidth=linewidth,label=file_obj.datatype,zorder=i, color=color_picker(file_obj))
                 ax.plot(x[file_obj.ttl_end:],file_obj.smoothed_df_f[file_obj.ttl_end:], linewidth=linewidth,zorder=i,color=color_picker(file_obj))
             else:
-                ax.plot(x[file_obj.ttl_end-file_obj.pre_injection_interval:file_obj.ttl_end],file_obj.df_f[file_obj.ttl_end-file_obj.pre_injection_interval:file_obj.ttl_end], linewidth=linewidth,label=file_obj.datatype,zorder=i, color=color_picker(file_obj))
+                ax.plot(x[file_obj.ttl_end-file_obj.baseline_interval:file_obj.ttl_end],file_obj.df_f[file_obj.ttl_end-file_obj.baseline_interval:file_obj.ttl_end], linewidth=linewidth,label=file_obj.datatype,zorder=i, color=color_picker(file_obj))
                 ax.plot(x[file_obj.ttl_end:],file_obj.df_f[file_obj.ttl_end:], linewidth=linewidth,zorder=i,color=color_picker(file_obj))
             
 
         else: 
             x_inj_to_end = x[x_inj_zero_idx:]
-            x_start_to_inj = x[x_inj_zero_idx-file_obj.pre_injection_interval:x_inj_zero_idx]
+            x_start_to_inj = x[x_inj_zero_idx-file_obj.baseline_interval:x_inj_zero_idx]
             if smoothed:
                 df_from_inj = file_obj.smoothed_df_f[file_obj.ttl_end:]
-                df_pre_inj = file_obj.smoothed_df_f[file_obj.ttl_end-file_obj.pre_injection_interval:file_obj.ttl_end]
+                df_pre_inj = file_obj.smoothed_df_f[file_obj.ttl_end-file_obj.baseline_interval:file_obj.ttl_end]
             else:
                 df_from_inj = file_obj.df_f[file_obj.ttl_end:]
-                df_pre_inj = file_obj.df_f[file_obj.ttl_end-file_obj.pre_injection_interval:file_obj.ttl_end]
+                df_pre_inj = file_obj.df_f[file_obj.ttl_end-file_obj.baseline_interval:file_obj.ttl_end]
             start_length = np.min([len(x_start_to_inj), len(df_pre_inj)])
             end_length = np.min([len(x_inj_to_end),len(df_from_inj)])
             ax.plot(x_inj_to_end[:end_length],df_from_inj[:end_length], linewidth=linewidth,label=file_obj.datatype,zorder=i,color=color_picker(file_obj))

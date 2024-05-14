@@ -57,18 +57,18 @@ def ExtractDataAcquisition(filename):
 
 def extract_from_doric(doric_dict, get_ttl=False):
 	signal = doric_dict[1]['Data'][1]['Data']
-	baseline = doric_dict[0]['Data'][1]['Data']
+	isosbestic = doric_dict[0]['Data'][1]['Data']
 	if get_ttl:
 		pulse = doric_dict[-1]['Data'][1]['Data']
-		return signal, baseline, pulse
+		return signal, isosbestic, pulse
 	else:
-		return signal, baseline
+		return signal, isosbestic
 
 #signal is in 2nd lock in (AIN01xAOUT02-LockIn)
 #control is on 1st lock in (AIN01xAOUT01-LockIn)
 #timestamps of TTL pulses (manually triggered by FG) (DigitalIO)
 
-def get_signal_and_baseline(filename, get_ttl=False):
+def get_signal_and_isosbestic(filename, get_ttl=False):
 	doric_dict = ExtractDataAcquisition(filename)
 	return extract_from_doric(doric_dict, get_ttl=get_ttl)
 
